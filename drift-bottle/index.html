@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+  漂流瓶 v20260427
+    - by clk
+
+  更新~
+  -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漂流瓶</title>
+    <link rel="stylesheet" href="index.css" type="text/css">
+</head>
+<body>
+    <div class="app">
+        <div class="sea">
+            <img src="bottle.png" class="bottle" onclick="collectBottle();" />
+        </div>
+        <img src="bottle.png" class="thrower" onclick="document.getElementById('throwContent').value = ''; document.querySelector('.bottle-throw').classList.remove('hide'); setTimeout(function() { document.querySelector('.bottle-throw').classList.add('show'); }, 0);" />
+    </div>
+    <div id="bottleInfo" class="bottle-info hide" onclick="classList.remove('show'); setTimeout(function() { classList.add('hide'); }, 200);">
+        <span id="bottleContent" onclick="event.stopPropagation();"></span><br>
+    </div>
+    <div id="bottleThrow" class="bottle-throw hide">
+        <span style="font-size: 1.8rem; line-height: 5rem;">扔一个...</span><br>
+        <input id="throwContent" onclick="event.stopPropagation();" placeholder="点这里打字..."><br>
+        <div>
+            <a onclick="throwBottle();">好了</a>
+            <span style="margin-left: 3rem;"></a>
+            <a onclick="document.getElementById('bottleThrow').classList.remove('show'); setTimeout(function() { document.getElementById('bottleThrow').classList.add('hide'); }, 200);">算了</a>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
