@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+
+.app>.head {
+    width: 100%;
+    max-height: calc(30vh);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+	box-shadow:inset -2px -2px 3px #aaaaaa;
+}
+
+.app>.head>img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.app>.section {
+    padding: .5em;
+    width: calc(100% - 1em);
+    border-bottom: 1px solid #888;
+}
+
+.app>.section>.title {
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 2em;
+}
+
+.app>.section>.extra {
+    font-style: italic;
+    float: right;
+}

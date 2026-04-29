@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>漂流瓶</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <link rel="stylesheet" href="../css/drift-bottle.css" type="text/css">
 </head>
 <body>
     <div class="app">
         <div class="sea">
-            <img src="img/bottle.png" class="bottle" onclick="collectBottle();" />
+            <img src="../img/drift-bottle-bottle.png" class="bottle" onclick="collectBottle();" />
         </div>
-        <img src="img/bottle.png" class="thrower" onclick="document.getElementById('throwContent').value = ''; document.querySelector('.bottle-throw').classList.remove('hide'); setTimeout(function() { document.querySelector('.bottle-throw').classList.add('show'); }, 0);" />
+        <img src="../img/drift-bottle-bottle.png" class="thrower" onclick="document.getElementById('throwContent').value = ''; document.querySelector('.bottle-throw').classList.remove('hide'); setTimeout(function() { document.querySelector('.bottle-throw').classList.add('show'); }, 0);" />
     </div>
     <div id="bottleInfo" class="bottle-info hide" onclick="classList.remove('show'); setTimeout(function() { classList.add('hide'); }, 200);">
         <span id="bottleContent" onclick="event.stopPropagation();"></span><br>
@@ -27,6 +27,6 @@
         </div>
     </div>
 
-    <script src="js/index.js"></script>
+    <script src="js/drift-bottle.js"></script>
 </body>
 </html>

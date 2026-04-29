@@ -9,12 +9,13 @@
 </head>
 <body>
     <div class="app">
-        <span style="font-size: 3rem;">维护中...</span>
-        <span style="margin-bottom: 2rem;"></span>
-        <span>前往 <a href="drift-bottle">漂流瓶</a> 或 <a href="sticky-note">校园便签</a></span>
-    </div>
-    <div class="footer">
-        <span>Powered by clk</span>
+        <ul class="navbar">
+            <li onclick="document.getElementById('iframe').setAttribute('src', 'news');">校园资讯</li>
+            <li onclick="document.getElementById('iframe').setAttribute('src', 'drift-bottle');">漂流瓶</li>
+        </ul>
+        <iframe src="news" id="iframe" frameborder="0" allowtransparency="true" class="content">
+
+        </iframe>
     </div>
 </body>
 </html>

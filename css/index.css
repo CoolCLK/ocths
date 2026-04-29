@@ -18,16 +18,41 @@ html, body {
     background: #FFF;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
 }
 
-.footer {
+.app>.navbar {
     width: 100%;
-    height: 5rem;
-    background: #888;
+    height: fit-content;
+    background: #666;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    flex-direction: row;
+    flex-wrap: nowrap;
     color: #FFF;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ 
+.app>.navbar li {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: .2s ease-in-out all;
+}
+
+.app>.navbar li:hover {
+    background-color: #111;
+    cursor: pointer;
+}
+
+.app>.content {
+    width: 100%;
+    flex: 1;
 }
