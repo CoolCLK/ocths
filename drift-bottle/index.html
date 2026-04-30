@@ -10,9 +10,9 @@
 <body>
     <div class="app">
         <div class="sea">
-            <img src="../img/drift-bottle-bottle.webp" class="bottle" onclick="collectBottle();" />
+            <img src="../img/drift-bottle-bottle.webp" class="bottle" draggable="false" onclick="collectBottle();" />
         </div>
-        <img src="../img/drift-bottle-bottle.webp" class="thrower" onclick="document.getElementById('throwContent').value = ''; document.querySelector('.bottle-throw').classList.remove('hide'); setTimeout(function() { document.querySelector('.bottle-throw').classList.add('show'); }, 0);" />
+        <img src="../img/drift-bottle-bottle.webp" class="thrower" draggable="false" onclick="document.getElementById('throwContent').value = ''; document.querySelector('.bottle-throw').classList.remove('hide'); setTimeout(function() { document.querySelector('.bottle-throw').classList.add('show'); }, 0);" />
     </div>
     <div id="bottleInfo" class="bottle-info hide" onclick="classList.remove('show'); setTimeout(function() { classList.add('hide'); }, 200);">
         <span id="bottleContent" onclick="event.stopPropagation();"></span><br>

@@ -20,6 +20,7 @@ html, body {
     justify-content: center;
     align-items: stretch;
     flex-direction: column;
+    user-select: none;
 }
 
 .app>.navbar {
