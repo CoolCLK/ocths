@@ -24,7 +24,7 @@ html, body {
 
 .app>.head {
     width: 100%;
-    max-height: calc(30vh);
+    max-height: calc(20vh);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -36,6 +36,7 @@ html, body {
 
 .app>.head>img {
     width: 100%;
+    height: auto;
     object-fit: cover;
 }
 
