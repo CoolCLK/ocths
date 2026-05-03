@@ -144,8 +144,13 @@ window.app = {
         nicknameSpan.textContent = '侨高学子';
 
         // 正文
-        const contentSpan = document.createElement('span');
-        contentSpan.textContent = data['idea'];
+        const contentSpan = document.createElement('div');
+        for (const line of (data['idea'].includes('\n') ? data['idea'].split('\n') : data['idea'])) {
+            const lineSpan = document.createElement('span');
+            lineSpan.textContent = line;
+            contentSpan.appendChild(lineSpan);
+            contentSpan.appendChild(document.createElement('br'));
+        }
         
         let gridDiv = null;
         if (data.photo && data.photo.length > 0) {
