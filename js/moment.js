@@ -517,7 +517,7 @@ document.getElementById('post').hide = function() {
 
 document.getElementById('idea').addEventListener('input', async function() {
     const _this = document.getElementById('idea');
-    if (_this.value.trim() !== "" && window.app['pendingFiles'].size > 0) {
+    if (_this.value.trim() !== "" || window.app['pendingFiles'].size > 0) {
         document.getElementById('post-btn').classList.remove('weui-btn_disabled');
     } else {
         document.getElementById('post-btn').classList.add('weui-btn_disabled');
@@ -550,7 +550,7 @@ document.getElementById('post-btn').addEventListener('click', async function() {
     for (const [_, it] of window.app.pendingFiles) {
         moment['photo'].push(await saveImageToIndexedDB(it));
     }
-    await saveMomentToDB(moment);
+    moment.id = (await saveMomentToDB(moment));
     document.querySelector('.app').querySelector('#post').after(await window.app['buildMoment'](moment));
     loading.hide();
     weui.toast('已完成');
@@ -695,7 +695,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 target = target.parentNode;
             }
             
-            if (document.getElementById('idea').value.trim() !== "" && window.app['pendingFiles'].size > 0) {
+            if (document.getElementById('idea').value.trim() !== "" || window.app['pendingFiles'].size > 0) {
                 document.getElementById('post-btn').classList.remove('weui-btn_disabled');
             } else {
                 document.getElementById('post-btn').classList.add('weui-btn_disabled');
