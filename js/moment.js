@@ -43,10 +43,26 @@ const saveMomentToDB = async function(moment) {
 
 const saveImageToIndexedDB = async function(file) {
     if (!db) throw new Error('数据库未初始化');
+    
+    // 1. 读取文件内容为 ArrayBuffer
+    const buffer = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+    });
+    
+    // 2. 存储 ArrayBuffer（并保留 MIME 类型）
+    const imageData = {
+        buffer: buffer,
+        type: file.type,
+        name: file.name,
+    };
+    
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([IMAGE_STORE_NAME], 'readwrite');
         const store = transaction.objectStore(IMAGE_STORE_NAME);
-        const request = store.add(file);
+        const request = store.add(imageData);
         request.onsuccess = () => resolve(request.result);
         request.onerror = (e) => reject(e);
     });
@@ -86,35 +102,43 @@ const updateMomentInDB = async function(id, updatedMoment) {
     });
 }
 
+const arrayBufferToBase64 = (buffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+};
+
+const base64ToArrayBuffer = (base64) => {
+    const binary = atob(base64);
+    const buffer = new ArrayBuffer(binary.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < binary.length; i++) {
+        view[i] = binary.charCodeAt(i);
+    }
+    return buffer;
+};
+
 const getImageById = async function(id) {
     if (!db) throw new Error('数据库未初始化');
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([IMAGE_STORE_NAME], 'readonly');
         const store = transaction.objectStore(IMAGE_STORE_NAME);
         const request = store.get(id);
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+            const data = request.result;
+            if (data && data.buffer) {
+                // 还原为 Blob
+                const blob = new Blob([data.buffer], { type: data.type });
+                resolve(blob);
+            } else {
+                resolve(null);
+            }
+        };
         request.onerror = (e) => reject(e);
     });
-}
-
-const blobToBase64 = function(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]); // 只取 base64 数据部分
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-}
-
-// 辅助函数：Base64 转 Blob
-const base64ToBlob = function(base64, mimeType) {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
 }
 
 window.app = {
@@ -322,7 +346,7 @@ window.app = {
 
         // 组装 body
         bodyDiv.appendChild(nicknameSpan);
-        bodyDiv.appendChild(contentSpan);
+        if (data['idea'].trim() !== '') bodyDiv.appendChild(contentSpan);
         if (gridDiv) bodyDiv.appendChild(gridDiv); // 将网格插入正文下方
         bodyDiv.appendChild(extraDiv);
         bodyDiv.appendChild(interactionDiv);
@@ -407,6 +431,18 @@ window.app = {
         if (!db) throw new Error('数据库未初始化');
         const loading = weui.loading('正在导入...');
         try {
+            if (!file) {
+                file = await new Promise((resolve, reject) => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json';
+                    input.onchange = async (e) => {
+                        resolve(e.target.files[0]);
+                        input.remove();
+                    };
+                    input.click();
+                });
+            }
             const text = await file.text();
             const importData = JSON.parse(text);
             if (!importData.moments || !importData.images) {
@@ -426,9 +462,14 @@ window.app = {
             const idMap = new Map();
             const imageStore = db.transaction([IMAGE_STORE_NAME], 'readwrite').objectStore(IMAGE_STORE_NAME);
             for (const img of importData.images) {
-                // 将 base64 转回 Blob
-                const blob = base64ToBlob(img.base64, img.type);
-                const request = imageStore.add(blob);
+                // 将 base64 转回 ArrayBuffer
+                const buffer = base64ToArrayBuffer(img.base64);
+                const imageData = {
+                    buffer: buffer,
+                    type: img.type,
+                    name: img.name
+                };
+                const request = imageStore.add(imageData);
                 const newId = await new Promise((resolve, reject) => {
                     request.onsuccess = () => resolve(request.result);
                     request.onerror = () => reject(request.error);
@@ -451,8 +492,8 @@ window.app = {
                 });
             }
             // 刷新页面显示
-            weui.toast('导入成功，即将刷新');
-            setTimeout(() => location.reload(), 1500);
+            weui.toast('导入成功');
+            setTimeout(() => location.reload(), 500);
         } catch (err) {
             console.error(err);
             weui.alert('导入失败：' + err.message);
@@ -470,18 +511,27 @@ window.app = {
             const transaction = db.transaction([IMAGE_STORE_NAME], 'readonly');
             const store = transaction.objectStore(IMAGE_STORE_NAME);
             const allImages = await new Promise((resolve, reject) => {
-                const request = store.getAll();
-                request.onsuccess = () => resolve(request.result);
+            const request = store.openCursor();
+            const items = [];
+            request.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        items.push({ id: cursor.primaryKey, value: cursor.value });
+                        cursor.continue();
+                    } else {
+                        resolve(items);
+                    }
+                };
                 request.onerror = () => reject(request.error);
             });
-            for (let i = 0; i < allImages.length; i++) {
-                const blob = allImages[i];
-                const base64 = await blobToBase64(blob);
-                imagesMap.set(i + 1, {   // IndexedDB autoIncrement 从1开始
-                    id: i + 1,
+
+            for (const { id, value: imageData } of allImages) {
+                const base64 = arrayBufferToBase64(imageData.buffer);
+                imagesMap.set(id, {
+                    id: id,
                     base64: base64,
-                    type: blob.type,
-                    name: blob.name || 'image.jpg'
+                    type: imageData.type,
+                    name: imageData.name || 'image.jpg'
                 });
             }
             // 3. 构建导出对象
