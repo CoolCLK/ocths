@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园圈</title>
+    <link rel="stylesheet" href="../css/weui-icon.css" type="text/css">
+    <link rel="stylesheet" href="../css/weui.min.css" type="text/css">
+    <link rel="stylesheet" href="../css/moment.css" type="text/css">
+</head>
+<body>
+    <div class="app">
+        <div class="head">
+            <span id="camera-btn" class="btn">
+                <span class="icon-camera"></span>
+            </span>
+        </div>
+        <div style="display: none;" role="dialog" class="weui-gallery" id="gallery">
+            <span id="galleryImg" alt="图片详情" role="img" class="weui-gallery__img"></span>
+        </div>
+        <div id="post" class="hidden">
+            <div class="container">
+                <textarea id="idea" placeholder="这一刻的想法..."></textarea>
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files" id="uploader-files" wah-hotarea="click">
+                        </ul>
+                        <div class="weui-uploader__input-box">
+                            <input id="uploader-input" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 2em;">
+                    <a id="post-btn" role="button" class="weui-btn weui-btn_disabled weui-btn_primary">发表</a>
+                    <a id="post-cancel-btn" role="button" class="weui-btn weui-btn_default">取消</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/weui.min.js"></script>
+    <script src="../js/moment.js"></script>
+</body>
+</html>
