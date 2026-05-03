@@ -145,7 +145,7 @@ window.app = {
 
         // 正文
         const contentSpan = document.createElement('div');
-        for (const line of (data['idea'].includes('\n') ? data['idea'].split('\n') : data['idea'])) {
+        for (const line of (data['idea'].includes('\n') ? data['idea'].split('\n') : [data['idea']])) {
             const lineSpan = document.createElement('span');
             lineSpan.textContent = line;
             contentSpan.appendChild(lineSpan);
@@ -289,7 +289,7 @@ window.app = {
                 commentRow.appendChild(commentNicknameB);
             }
             commentRow.appendChild(commentCContent);
-            for (const line of (content.includes('\n') ? content.split('\n') : content)) {
+            for (const line of (content.includes('\n') ? content.split('\n') : [content])) {
                 const lineSpan = document.createElement('span');
                 lineSpan.textContent = line;
                 commentRow.appendChild(lineSpan);
