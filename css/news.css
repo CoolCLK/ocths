@@ -24,8 +24,7 @@ html, body {
 
 .app>.head {
     width: 100%;
-    max-height: calc(20vh);
-    overflow: hidden;
+    max-height: calc(30vh);
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
