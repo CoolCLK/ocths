@@ -367,6 +367,7 @@ window.app = {
             e.preventDefault();
             interactionDiv.classList.remove('hidden');
             likeRow.classList.remove('hidden');
+            likeIcon.classList.add('liked');
             momentData.like += 1;
             // 修改点赞文字（模拟当前用户点赞）
             likeCountSpan.textContent = `侨高学子等共 ${momentData.like} 人赞了`;
