@@ -281,14 +281,20 @@ window.app = {
             commentNicknameB.className = 'nickname';
             commentNicknameB.textContent = '侨高学子';
 
-            const commentContent = document.createElement('span');
-            commentContent.textContent = `：${content}`;
+            const commentCContent = document.createElement('span');
+            commentCContent.textContent = `：`;
             commentRow.appendChild(commentNickname);
             if (reply) {
                 commentRow.appendChild(commentReplyContent);
                 commentRow.appendChild(commentNicknameB);
             }
-            commentRow.appendChild(commentContent);
+            commentRow.appendChild(commentCContent);
+            for (const line of (content.includes('\n') ? content.split('\n') : content)) {
+                const lineSpan = document.createElement('span');
+                lineSpan.textContent = line;
+                commentRow.appendChild(lineSpan);
+                commentRow.appendChild(document.createElement('br'));
+            }
             commentRow.addEventListener('click', async function(e) {
                 e.preventDefault();
                 setTimeout(function() {
