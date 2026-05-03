@@ -297,12 +297,16 @@ window.app = {
             interactionDiv.insertBefore(commentRow, commentArea);
         }
 
+        const buildCommentAndReplies = function(data, first = true) {
+            buildComment(data['content'], data, !first);
+            for (const reply of data['reply']) {
+                buildCommentAndReplies(reply, false);
+            }
+        };
+
         // 现有评论行
         for (const comment of momentData['comment']) {
-            buildComment(comment['content'], comment, false);
-            for (const reply of comment['reply']) {
-                buildComment(reply['content'], reply, true);
-            }
+            buildCommentAndReplies(comment);
         }
 
         // 组装 body
