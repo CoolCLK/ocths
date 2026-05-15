@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "content": "Arcaea",
+    "openCount": 10,
+    "createdAt": 1778470023884,
+    "lastOpenedAt": 1778483503745
+  },
+  {
+    "id": 2,
+    "content": "你们这些蠢货",
+    "openCount": 3,
+    "createdAt": 1778480131309,
+    "lastOpenedAt": 1778482905043
+  }
+]
